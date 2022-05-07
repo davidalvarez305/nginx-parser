@@ -25,6 +25,12 @@ type Counter struct {
 func main() {
 	var req []Request
 	var botCounter Counter
+
+	if len(os.Args) < 2 {
+		fmt.Print("Missing dir path arg\n")
+		os.Exit(1)
+	}
+
 	DIR_PATH := os.Args[1]
 
 	items, _ := ioutil.ReadDir(DIR_PATH)

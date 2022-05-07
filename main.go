@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -55,14 +56,26 @@ func main() {
 				m := method.FindString(arr[i])
 				u := url.FindString(arr[i])
 				b := bot.FindString(arr[i])
-				s := status.FindString(arr[i])
+				s := strings.TrimSpace(status.FindString(arr[i]))
 				fin := Request{
 					Method: m,
 					Url:    u,
 					Bot:    b,
-					Status: strings.TrimSpace(s),
+					Status: s,
 				}
-				if len(b) > 0 {
+				var status int
+
+				if len(s) > 0 {
+					sc, err := strconv.Atoi(s)
+
+					if err != nil {
+						fmt.Println("Error converting status to int.")
+					}
+
+					status = sc
+				}
+
+				if len(b) > 0 && status >= 400 {
 					req = append(req, fin)
 					if b == "Googlebot" {
 						botCounter.Google += 1
